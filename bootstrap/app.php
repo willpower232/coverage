@@ -23,7 +23,7 @@ $app = new Laravel\Lumen\Application(
     dirname(__DIR__)
 );
 
-// $app->withFacades();
+$app->withFacades();
 
 // $app->withEloquent();
 
@@ -56,6 +56,7 @@ $app->singleton(
 
 $app->configure('app');
 $app->configure('coverage');
+$app->configure('filesystems');
 
 /*
 |--------------------------------------------------------------------------
@@ -88,6 +89,7 @@ $app->routeMiddleware([
 */
 
 $app->register(App\Providers\AppServiceProvider::class);
+$app->register(Illuminate\Filesystem\FilesystemServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

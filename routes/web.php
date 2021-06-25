@@ -1,6 +1,6 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +13,9 @@
 |
 */
 
+/* @var \Laravel\Lumen\Routing\Router $router */
 $router->get('/', ['middleware' => 'auth', function () use ($router) {
+    dump(Storage::exists('hello'));
+
     return $router->app->version();
 }]);
