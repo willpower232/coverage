@@ -1,24 +1,28 @@
-# Lumen PHP Framework
+# Coverage
 
-[![Build Status](https://travis-ci.org/laravel/lumen-framework.svg)](https://travis-ci.org/laravel/lumen-framework)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![Latest Stable Version](https://img.shields.io/packagist/v/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
-[![License](https://img.shields.io/packagist/l/laravel/framework)](https://packagist.org/packages/laravel/lumen-framework)
+[![run-tests](https://github.com/willpower232/coverage/actions/workflows/run-tests.yml/badge.svg)](https://github.com/willpower232/coverage/actions/workflows/run-tests.yml)
+![Coverage](https://laravel-coverage.s3.eu-west-2.amazonaws.com/willpower232/coverage/main.svg)
 
-Laravel Lumen is a stunningly fast PHP micro-framework for building web applications with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Lumen attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as routing, database abstraction, queueing, and caching.
+This is a reference implementation of willpower232/cloverparser-laravel and willpower232/cloverparser to generate coverage badges from CI output. I'm purposefully using as few files as possible as a challenge to myself.
 
-## Official Documentation
+---
 
-Documentation for the framework can be found on the [Lumen website](https://lumen.laravel.com/docs).
+A former casual user of [codecov](https://codecov.io) and interested in controlling my own data, I decided to see how complicated it would be to operate a similar setup myself after [their uploader script was compromised](https://www.theregister.com/2021/04/19/codecov_warns_of_stolen_credentials/).
 
-## Contributing
+This is the final part of this project, combining the previous parts with a basic layer of authentication for real world use.
 
-Thank you for considering contributing to Lumen! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Security Vulnerabilities
+## Usage
 
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+The quickest way from most CI environments would be the curl command.
 
-## License
+```
+curl -X POST -F "file=@<path to clover file>" -H "Authorization: Bearer <your token>" https://<your coverage site>/<username>/<project-name>/<branch-name>
+```
 
-The Lumen framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Configuration
+
+Security is provided by a manually specified token `COVERAGE_AUTH_TOKEN` in the env, this value could be specified as query, input, password, or bearer (see AppServiceProvider). If you were in a multi-user environment you would want to swap that out with something more secure that prevented people overwriting other users coverage files.
+
+File are stored in S3 in this example as it is cloud storage with its own hosting, concealing where you host this code, and storing only the few bytes required should not cost you much, if anything. There is nothing stopping you from configuring alternative disks, as long as there is a Laravel driver for them.

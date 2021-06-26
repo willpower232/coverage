@@ -90,6 +90,7 @@ $app->routeMiddleware([
 
 $app->register(App\Providers\AppServiceProvider::class);
 $app->register(Illuminate\Filesystem\FilesystemServiceProvider::class);
+$app->register(WillPower232\CloverParserLaravel\CloverParserServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------

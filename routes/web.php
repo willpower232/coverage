@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Storage;
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -14,8 +12,6 @@ use Illuminate\Support\Facades\Storage;
 */
 
 /* @var \Laravel\Lumen\Routing\Router $router */
-$router->get('/', ['middleware' => 'auth', function () use ($router) {
-    dump(Storage::exists('hello'));
 
-    return $router->app->version();
-}]);
+// basically any route with three segments
+$router->post('/{user}/{project}/{branch}', 'Controller@parse');
