@@ -36,14 +36,21 @@ class Controller extends BaseController
             ],
         ]);
 
+        // the chance of this not being a file at this point is nil but stan won't like me
+        /** @var \Illuminate\Http\UploadedFile $file */
+        $file = $request->file('file');
+
         if ($validator->fails()) {
-            throw new ValidationException($validator, new JsonResponse($validator->errors()->getMessages(), 422));
+            $messages = $validator->errors()->getMessages();
+
+            if ($file instanceof \Illuminate\Http\UploadedFile) {
+                array_unshift($messages['file'], $file->getErrorMessage());
+            }
+
+            throw new ValidationException($validator, new JsonResponse($messages, 422));
         }
 
         // anyway...
-
-        /** @var \Illuminate\Http\UploadedFile $file */
-        $file = $request->file('file');
 
         $parser = app(CloverParser::class)
             ->setPath("$user/$project", $branch);
