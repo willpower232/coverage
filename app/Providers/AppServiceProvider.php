@@ -28,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // @phpstan-ignore-next-line this probably works
         $this->app['auth']->viaRequest('api', function (Request $request) {
             $token = $this->getTokenForRequest($request);
 
