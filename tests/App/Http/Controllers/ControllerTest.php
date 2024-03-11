@@ -53,11 +53,9 @@ class ControllerTest extends TestCase
             'file' => $file,
         ];
 
-        $this->call('POST', '/user/project/branch', [], [], $files, $server);
+        $response = $this->call('POST', '/user/project/branch', [], [], $files, $server);
 
-        // this is never going to work is it
-
-        $this->assertResponseStatus(204);
+        $response->assertNoContent();
 
         Storage::disk('local')->assertExists('user/project/branch.svg');
         Storage::disk('local')->assertExists('user/project/branch.clover');
