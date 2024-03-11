@@ -62,4 +62,47 @@ class ControllerTest extends TestCase
         Storage::disk('local')->assertExists('user/project/branch.svg');
         Storage::disk('local')->assertExists('user/project/branch.clover');
     }
+
+    public function testItDoesNotHappen(): void
+    {
+        Storage::fake('local');
+
+        $clover = <<<ENDNOTCLOVER
+        I am a plain text file
+        ENDNOTCLOVER;
+
+        // reference Illuminate\Http\Testing\FileFactory, combination of create and createWithContent
+        $tmpfile = tmpfile();
+
+        if ($tmpfile === false) {
+            throw new \RuntimeException('help');
+        }
+
+        fwrite($tmpfile, $clover);
+
+        $file = tap(new File('coverage.clover', $tmpfile), function ($file) use ($tmpfile) {
+            $fstat = fstat($tmpfile);
+
+            if ($fstat === false) {
+                throw new \RuntimeException('help');
+            }
+
+            $file->sizeToReport = $fstat['size'];
+            $file->mimeTypeToReport = 'text/plain';
+        });
+
+        $headers = [
+            'Authorization' => 'Bearer hello',
+        ];
+
+        $server = $this->transformHeadersToServerVars($headers);
+
+        $files = [
+            'file' => $file,
+        ];
+
+        $response = $this->call('POST', '/user/project/branch', [], [], $files, $server);
+
+        $response->assertUnprocessable();
+    }
 }
